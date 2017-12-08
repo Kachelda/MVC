@@ -17,3 +17,8 @@ C:\Users\Cutlers\source\repos\ASP.Net MVC\GameStore\GameStore.Domain\obj\Debug\G
 C:\Users\Cutlers\source\repos\ASP.Net MVC\GameStore\GameStore.Domain\obj\Debug\GameStore.Domain.csproj.CoreCompileInputs.cache
 C:\Users\Cutlers\source\repos\ASP.Net MVC\GameStore\GameStore.Domain\obj\Debug\GameStore.Domain.dll
 C:\Users\Cutlers\source\repos\ASP.Net MVC\GameStore\GameStore.Domain\obj\Debug\GameStore.Domain.pdb
+C:\Users\Cutlers\source\repos\ASP.Net MVC\GameStore\GameStore.Domain\bin\Debug\GameStore.Domain.dll.config
+C:\Users\Cutlers\source\repos\ASP.Net MVC\GameStore\GameStore.Domain\bin\Debug\EntityFramework.dll
+C:\Users\Cutlers\source\repos\ASP.Net MVC\GameStore\GameStore.Domain\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Cutlers\source\repos\ASP.Net MVC\GameStore\GameStore.Domain\bin\Debug\EntityFramework.xml
+C:\Users\Cutlers\source\repos\ASP.Net MVC\GameStore\GameStore.Domain\bin\Debug\EntityFramework.SqlServer.xml
