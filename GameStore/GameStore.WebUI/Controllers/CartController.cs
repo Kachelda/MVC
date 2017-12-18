@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Linq;
 using System.Web.Mvc;
-using GameStore.Domain.Abstract;
 using GameStore.Domain.Entities;
+using GameStore.Domain.Abstract;
 using GameStore.WebUI.Models;
 
 namespace GameStore.WebUI.Controllers
@@ -12,53 +9,75 @@ namespace GameStore.WebUI.Controllers
     public class CartController : Controller
     {
         private IGameRepository repository;
-        public CartController(IGameRepository repo)
+        private IOrderProcessor orderProcessor;
+
+        public CartController(IGameRepository repo, IOrderProcessor processor)
         {
             repository = repo;
+            orderProcessor = processor;
         }
 
-        public ViewResult Index(string returnUrl)
+        public ViewResult Index(Cart cart, string returnUrl)
         {
             return View(new CartIndexViewModel
             {
-                Cart = GetCart(),
+                Cart = cart,
                 ReturnUrl = returnUrl
             });
         }
 
-        public RedirectToRouteResult AddToCart(int gameId, string returnUrl)
+        public RedirectToRouteResult AddToCart(Cart cart, int gameId, string returnUrl)
         {
             Game game = repository.Games
                 .FirstOrDefault(g => g.GameId == gameId);
 
             if (game != null)
             {
-                GetCart().AddItem(game, 1);
+                cart.AddItem(game, 1);
             }
             return RedirectToAction("Index", new { returnUrl });
         }
 
-        public RedirectToRouteResult RemoveFromCart(int gameId, string returnUrl)
+        public RedirectToRouteResult RemoveFromCart(Cart cart, int gameId, string returnUrl)
         {
             Game game = repository.Games
                 .FirstOrDefault(g => g.GameId == gameId);
 
             if (game != null)
             {
-                GetCart().RemoveLine(game);
+                cart.RemoveLine(game);
             }
             return RedirectToAction("Index", new { returnUrl });
         }
 
-        public Cart GetCart()
+        public PartialViewResult Summary(Cart cart)
         {
-            Cart cart = (Cart)Session["Cart"];
-            if (cart == null)
+            return PartialView(cart);
+        }
+
+        public ViewResult Checkout()
+        {
+            return View(new ShippingDetails());
+        }
+
+        [HttpPost]
+        public ViewResult Checkout(Cart cart, ShippingDetails shippingDetails)
+        {
+            if (cart.Lines.Count() == 0)
             {
-                cart = new Cart();
-                Session["Cart"] = cart;
+                ModelState.AddModelError("", "Извините, ваша корзина пуста!");
             }
-            return cart;
+
+            if (ModelState.IsValid)
+            {
+                orderProcessor.ProcessOrder(cart, shippingDetails);
+                cart.Clear();
+                return View("Completed");
+            }
+            else
+            {
+                return View(shippingDetails);
+            }
         }
     }
 }
